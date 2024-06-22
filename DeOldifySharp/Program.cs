@@ -5,7 +5,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace ColorfulSoft.DeOldify
+namespace DeOldifySharp
 {
 
     /// <summary>
@@ -23,7 +23,7 @@ namespace ColorfulSoft.DeOldify
             // Reduce application CPU priority to avoid freezes during image processing
             System.Diagnostics.Process.GetCurrentProcess().PriorityClass =
                 System.Diagnostics.ProcessPriorityClass.BelowNormal;
-            DeOldify.Initialize();
+            //DeOldify.Initialize();
             if(args.Length > 0)
             {
                 return;
@@ -31,7 +31,8 @@ namespace ColorfulSoft.DeOldify
             Application.EnableVisualStyles();
             try
             {
-                Application.Run(new MainForm());
+                //Application.Run(new MainForm());
+                Application.Run(new DeOldifySharp.FrmMain());
             }
             catch
             {

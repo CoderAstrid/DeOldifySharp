@@ -12,7 +12,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Net;
 
-namespace ColorfulSoft.DeOldify
+namespace DeOldifySharp
 {
 
     /// <summary>

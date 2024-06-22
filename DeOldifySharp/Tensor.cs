@@ -5,13 +5,13 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace ColorfulSoft.DeOldify
+namespace DeOldifySharp
 {
 
     /// <summary>
     /// Multidimentional array of floating point data type.
     /// </summary>
-    internal sealed unsafe class Tensor : IDisposable
+    public sealed unsafe class Tensor : IDisposable
     {
 
         /// <summary>
@@ -157,7 +157,5 @@ namespace ColorfulSoft.DeOldify
             }
             return t;
         }
-
     }
-
 }

@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Collections.Generic;
 
-namespace ColorfulSoft.DeOldify
+namespace DeOldifySharp
 {
 
     internal static unsafe class DeOldify

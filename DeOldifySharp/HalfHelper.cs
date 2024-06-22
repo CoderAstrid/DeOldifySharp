@@ -4,11 +4,9 @@
 
 using System;
 
-namespace ColorfulSoft.DeOldify
+namespace DeOldifySharp
 {
-
-#if half
-
+    
     // Adapted from this: https://sourceforge.net/projects/csharp-half/
 
     ///<summary>Half to Float conversion.</summary>
@@ -92,7 +90,5 @@ namespace ColorfulSoft.DeOldify
         }
 
     }
-
-#endif
 
 }

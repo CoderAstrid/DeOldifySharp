@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
-namespace ColorfulSoft.DeOldify
+namespace DeOldifySharp
 {
 
     /// <summary>
@@ -137,7 +137,8 @@ namespace ColorfulSoft.DeOldify
                                     int strideX,
                                     int dilationY,
                                     int dilationX,
-                                    int group)
+                                    int group,
+                                    bool simd)
         {
             int srcC = x.Shape[0];
             int srcH = x.Shape[1];
@@ -166,6 +167,7 @@ namespace ColorfulSoft.DeOldify
                     Parallel.For(0, dstH, (int dy) =>
                     {
                         var buffer = (float*)Marshal.AllocHGlobal(buf_size).ToPointer();
+                        
                         var sy1 = dy * strideY - padY;
                         for(int dx = 0; dx < dstW; ++dx)
                         {
@@ -205,27 +207,30 @@ namespace ColorfulSoft.DeOldify
                             {
                                 float sum = 0;
                                 var w = pweight + (g * dstC + dc) * weight_base;
-                                #if simd
+                                if (simd)
+                                {                                    
                                     var buffer_vec = (Vector4*)buffer;
                                     var w_vec = (Vector4*)w;
                                     var result = new Vector4(0f);
                                     int m = 0;
-                                    for(; m < weight_base / 4; ++m)
+                                    for (; m < weight_base / 4; ++m)
                                     {
                                         result += *buffer_vec++ * *w_vec++;
                                     }
                                     sum = result.X + result.Y + result.Z + result.W;
                                     m *= 4;
-                                    for(; m < weight_base; ++m)
+                                    for (; m < weight_base; ++m)
                                     {
                                         sum += buffer[m] * w[m];
                                     }
-                                #else
-                                    for(int m = 0; m < weight_base; ++m)
+                                }
+                                else
+                                {
+                                    for (int m = 0; m < weight_base; ++m)
                                     {
                                         sum += buffer[m] * w[m];
                                     }
-                                #endif
+                                }
                                 dst_biased[((dst_base1 + dc) * dstH + dy) * dstW] = sum + bias_biased[dc];
                             }
                         }
@@ -281,27 +286,30 @@ namespace ColorfulSoft.DeOldify
                             {
                                 float sum = 0;
                                 var w = pweight + (g * dstC + dc) * weight_base;
-                                #if simd
+                                if (simd)
+                                {
                                     var buffer_vec = (Vector4*)buffer;
                                     var w_vec = (Vector4*)w;
                                     var result = new Vector4(0f);
                                     int m = 0;
-                                    for(; m < weight_base / 4; ++m)
+                                    for (; m < weight_base / 4; ++m)
                                     {
                                         result += *buffer_vec++ * *w_vec++;
                                     }
                                     sum = result.X + result.Y + result.Z + result.W;
                                     m *= 4;
-                                    for(; m < weight_base; ++m)
+                                    for (; m < weight_base; ++m)
                                     {
                                         sum += buffer[m] * w[m];
                                     }
-                                #else
-                                    for(int m = 0; m < weight_base; ++m)
+                                }
+                                else
+                                {
+                                    for (int m = 0; m < weight_base; ++m)
                                     {
                                         sum += buffer[m] * w[m];
                                     }
-                                #endif
+                                }
                                 dst_biased[((dst_base1 + dc) * dstH + dy) * dstW] = sum;
                             }
                         }
